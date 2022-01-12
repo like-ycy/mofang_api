@@ -6,6 +6,7 @@ from flask_pymongo import PyMongo
 from flask_redis import FlaskRedis
 from flask_sqlalchemy import SQLAlchemy
 
+from application.utils.commands import Command
 from application.utils.config import Config
 from application.utils.logger import Logger
 
@@ -25,6 +26,9 @@ mongo: PyMongo = PyMongo()
 # 日志实例化
 log = Logger()
 
+# 自定义命令实例化
+command: Command = Command()
+
 
 def init_app(config_path) -> Flask:
     """初始化Flask应用"""
@@ -37,4 +41,5 @@ def init_app(config_path) -> Flask:
     redis_check.init_app(app)
     mongo.init_app(app)
     log.init_app(app)
+    command.init_app(app)
     return app

@@ -4,7 +4,7 @@ from logging.handlers import TimedRotatingFileHandler  # 按时间分割日志�
 from flask import Flask
 
 
-class Logger():
+class Logger:
     """日志配置"""
 
     def __init__(self, app: Flask = None):
