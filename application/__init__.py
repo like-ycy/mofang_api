@@ -44,4 +44,6 @@ def init_app(config_path) -> Flask:
     log.init_app(app)
     command.init_app(app)
     register_blueprint(app)  # 注册蓝图
+    with app.app_context():
+        mysqldb.create_all()  # db创建数据表
     return app
