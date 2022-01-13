@@ -1,4 +1,6 @@
-from typing import List
+from importlib import import_module
+from types import ModuleType
+from typing import List, Callable
 
 from flask import Flask, Blueprint
 
@@ -13,5 +15,16 @@ def register_blueprint(app: Flask):
         blueprint_name: str = blueprint_path.split('.')[-1]
         # 创建蓝图对象
         blueprint: Blueprint = Blueprint(blueprint_name, blueprint_path)
+        # 拼接子路由文件
+        blueprint_url_path: str = blueprint_path + '.urls'
+        url_module = import_module(blueprint_url_path)
+        urlpatterns: ModuleType = url_module.urlpatterns
+        # # 在循环中，把urlpatterns的每一个路由信息添加注册到蓝图对象里面
+        for url in urlpatterns:
+            blueprint.add_url_rule(**url)
         # 蓝图对象注册到app
         app.register_blueprint(blueprint, url_prefix="")
+
+
+def path(rule: str, view_func: Callable, **kwargs):
+    return {"rule": rule, "view_func": view_func, **kwargs}

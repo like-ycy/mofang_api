@@ -6,7 +6,7 @@ from flask_pymongo import PyMongo
 from flask_redis import FlaskRedis
 from flask_sqlalchemy import SQLAlchemy
 
-from application.utils.blueprint import register_blueprint
+from application.utils.blueprint import register_blueprint, path
 from application.utils.commands import Command
 from application.utils.config import Config
 from application.utils.logger import Logger
