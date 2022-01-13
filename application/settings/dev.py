@@ -26,3 +26,8 @@ LOG_FILE: str = "logs/mofang.log"
 LOG_LEVEL: str = "DEBUG"
 LOG_BACKPU_COUNT: int = 31
 LOG_FORMAT: str = '%(asctime)s - %(levelname)s - %(filename)s - %(funcName)s - %(lineno)s - %(message)s'
+
+"""蓝图列表(子应用)"""
+INSTALL_BLUEPRINT = [
+    "application.apps.home",
+]

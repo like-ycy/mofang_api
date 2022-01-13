@@ -6,6 +6,7 @@ from flask_pymongo import PyMongo
 from flask_redis import FlaskRedis
 from flask_sqlalchemy import SQLAlchemy
 
+from application.utils.blueprint import register_blueprint
 from application.utils.commands import Command
 from application.utils.config import Config
 from application.utils.logger import Logger
@@ -42,4 +43,5 @@ def init_app(config_path) -> Flask:
     mongo.init_app(app)
     log.init_app(app)
     command.init_app(app)
+    register_blueprint(app)  # 注册蓝图
     return app
