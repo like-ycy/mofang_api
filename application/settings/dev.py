@@ -31,3 +31,6 @@ LOG_FORMAT: str = '%(asctime)s - %(levelname)s - %(filename)s - %(funcName)s - %
 INSTALL_BLUEPRINT = [
     "application.apps.home",
 ]
+
+"""总路由"""
+URL_PATH = "application.urls"
