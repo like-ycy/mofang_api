@@ -18,7 +18,7 @@ def register_blueprint(app: Flask):
 
     # 总路由列表
     if not hasattr(app_urls_module, 'urlpatterns'):
-        app.logger.error("总路由文件URL_PATH，没有路s由列表！")
+        app.logger.error("总路由文件URL_PATH，没有路由列表！")
         raise Exception("总路由文件URL_PATH，没有路由列表！")
 
     app_urlpatterns: List = app_urls_module.urlpatterns
