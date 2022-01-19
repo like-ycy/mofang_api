@@ -29,7 +29,7 @@ LOG_FORMAT: str = '%(asctime)s - %(levelname)s - %(filename)s - %(funcName)s - %
 
 """蓝图列表(子应用)"""
 INSTALL_BLUEPRINT = [
-    "application.apps.home",
+    "application.apps.users",
 ]
 
 """总路由"""
