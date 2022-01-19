@@ -34,3 +34,7 @@ INSTALL_BLUEPRINT = [
 
 """总路由"""
 URL_PATH = "application.urls"
+
+"""JSONRPC"""
+# api接口web调试界面的url地址
+API_BROWSE_URL = "/api/browse"
