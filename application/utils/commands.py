@@ -1,7 +1,7 @@
+import os
 from typing import Optional
 
 import click
-import os
 from flask import Flask
 
 
@@ -27,14 +27,9 @@ class Command():
             # 生成蓝图名称对象的目录
             os.mkdir(name)
             open("%s/__init__.py" % name, "w")
-            open("%s/ws.py" % name, "w")  # websocket的视图文件
-            open("%s/api.py" % name, "w")  # api接口的视图文件
             open("%s/views.py" % name, "w")  # 普通视图文件
             open("%s/models.py" % name, "w")
-            open("%s/documents.py" % name, "w")
             open("%s/urls.py" % name, "w")  # 视图路由
-            open("%s/test.py" % name, "w")
-            open("%s/tasks.py" % name, "w")
             open("%s/serializers.py" % name, "w")  # 序列化器文件
 
             print("蓝图[%s]创建完成...." % name)
