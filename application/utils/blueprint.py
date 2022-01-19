@@ -3,9 +3,10 @@ from types import ModuleType
 from typing import List, Callable, Union, Dict
 
 from flask import Flask, Blueprint
+from flask_jsonrpc import JSONRPC
 
 
-def register_blueprint(app: Flask):
+def register_blueprint(app: Flask, jsonrpc: JSONRPC):
     """自动注册蓝图(子应用)"""
     # 从配置文件中读取需要注册到项目中的蓝图路径信息
     blueprint_path_list: List = app.config.get('INSTALL_BLUEPRINT', [])
@@ -63,11 +64,16 @@ def register_blueprint(app: Flask):
                 # 从总路由中查到当前蓝图对象的前缀就不要继续往下遍历了
                 break
 
-        # 把urlpatterns的每一个路由信息添加注册到蓝图对象里面
+        # 把urlpatterns的每一个路由信息添加注册到jsonrpc对象里面
         for url in urlpatterns:
             # url = {role："/index", view_func："views.index"}
-            blueprint.add_url_rule(**url)
-
+            # blueprint.add_url_rule(**url)
+            name = url.pop("rule")
+            if len(url_prefix) > 0:
+                url["name"] = f"{url_prefix[1:].title()}.{name}"
+            else:
+                url["name"] = name
+            jsonrpc.register_view_function(**url)
         try:
             # 让蓝图自动发现模型模块
             import_module(f"{blueprint_path}.models")
