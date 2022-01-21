@@ -7,4 +7,7 @@ urlpatterns: List = [
     path('mobile', views.check_mobile),
     path("register", views.register),
     path("sms", views.sms),
+    path("login", views.login),
+    path("info", views.info),
+    path("refresh", views.refresh),
 ]
