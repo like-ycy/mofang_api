@@ -91,3 +91,13 @@ def path(rule: str, name: Union[Callable, str], **kwargs) -> Dict:
         return {"url_prefix": rule, "blueprint_url_subffix": name, **kwargs}
     else:
         return {}
+
+
+class APIView(object):
+    """视图基类"""
+
+    @classmethod
+    def as_view(cls, func):
+        if hasattr(cls, func):
+            obj = cls()
+            return getattr(obj, func)
