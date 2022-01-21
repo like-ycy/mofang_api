@@ -4,6 +4,7 @@ from pathlib import Path
 from celery import Celery
 from flask import Flask
 from flask_jsonrpc import JSONRPC
+from flask_jwt_extended import JWTManager
 from flask_pymongo import PyMongo
 from flask_redis import FlaskRedis
 from flask_sqlalchemy import SQLAlchemy
@@ -39,6 +40,9 @@ jsonrpc = JSONRPC()
 # celery初始化
 celery = Celery()
 
+# jwt认证模块实例化
+jwt = JWTManager()
+
 
 def init_app(config_path) -> Flask:
     """初始化Flask应用"""
@@ -71,6 +75,9 @@ def init_app(config_path) -> Flask:
     jsonrpc.browse_url = app.config.get("API_BROWSE_URL", "/api/browse")
     jsonrpc.enable_web_browsable_api = app.config.get("DEBUG", False)
     jsonrpc.init_app(app)
+
+    # jwt初始化，必须写在蓝图注册代码的上方
+    jwt.init_app(app)
 
     # 注册蓝图
     register_blueprint(app, jsonrpc)
