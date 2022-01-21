@@ -11,6 +11,11 @@ if [ $1 ]; then
   elif [ $1 == "startapp" ]; then
     cd application/apps
     flask $1 --name=$2
+  elif [ $1 == "celery" ]; then
+    celery -A manage.celery worker -l info
+
+  elif [ $1 == "beat" ]; then
+    celery -A manage.celery beat -l info
   else
     flask $1
   fi
