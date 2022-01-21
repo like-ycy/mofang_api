@@ -3,7 +3,7 @@
 # 调试模式
 DEBUG: bool = True
 # 语言
-LANGUAGE: str = "zh_hans"
+LANGUAGE: str = "zh_CN"
 
 """MySQL数据库配置"""
 # 数据库连接
