@@ -46,3 +46,31 @@ SMS_APP_ID: str = "8a216da863f8e6c20164139688400c21"  # 应用ID
 SMS_TEMPLATE_ID: int = 1  # 短信模板ID
 SMS_EXPIRE_TIME: int = 60 * 5  # 短信有效时间，单位:秒/s
 SMS_INTERVAL_TIME: int = 60  # 短信发送冷却时间，单位:秒/s
+
+"""Celery配置"""
+# 某些情况下可以防止死锁
+CELERY_FORCE_EXECV = True
+# 设置并发的worker数量
+CELERYD_CONCURRENCY = 20
+# 设置失败允许重试
+CELERY_ACKS_LATE = True
+# 每个worker最多执行500个任务被销毁，可以防止内存泄漏
+CELERYD_MAX_TASKS_PER_CHILD = 500
+# 单个任务的最大运行时间，超时会被杀死【注意：如果异步任务中有IO操作则建议不要设置这个数字太小，或者建议不要设置了】
+CELERYD_TIME_LIMIT = 10 * 60
+# 任务发出后，经过一段时间还未收到acknowledge , 就将任务重新交给其他worker执行
+CELERY_DISABLE_RATE_LIMITS = True
+# celery的任务结果内容格式
+CELERY_ACCEPT_CONTENT = ['json', 'pickle']
+# celery的任务队列地址
+BROKER_URL = "redis://dba:123.com@127.0.0.1:6379/15"
+# celery的结果队列地址
+CELERY_RESULT_BACKEND = "redis://dba:123.com@127.0.0.1:6379/14"
+
+# celery的定时任务调度器配置
+BEAT_SCHEDULE = {
+    # "test": {
+    #     "task": "get_sendback",
+    #     "schedule": 10,
+    # }
+}
