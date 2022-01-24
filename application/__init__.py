@@ -2,9 +2,9 @@
 from pathlib import Path
 
 from celery import Celery
+from faker import Faker
 from flask import Flask
 from flask_jsonrpc import JSONRPC
-from flask_jwt_extended import JWTManager
 from flask_pymongo import PyMongo
 from flask_redis import FlaskRedis
 from flask_sqlalchemy import SQLAlchemy
@@ -14,6 +14,7 @@ from application.utils.blueprint import register_blueprint, path, APIView
 from application.utils.commands import Command
 from application.utils.config import Config
 from application.utils.logger import Logger
+from flask_jwt_extended import JWTManager
 
 # 初始化配置类
 config: Config = Config()
@@ -81,6 +82,9 @@ def init_app(config_path) -> Flask:
 
     # 注册蓝图
     register_blueprint(app, jsonrpc)
+
+    # 数据种子生成器[faker]
+    app.faker = Faker(app.config.get("LANGUAGE"))
 
     # 加载celery配置
     celery.main = app.name
