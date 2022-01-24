@@ -16,6 +16,10 @@ if [ $1 ]; then
 
   elif [ $1 == "beat" ]; then
     celery -A manage.celery beat -l info
+
+   # 生成测试用户
+  elif [ $1 == 'user' ]; then
+    flask $1 --num=$2 --password=$3
   else
     flask $1
   fi
