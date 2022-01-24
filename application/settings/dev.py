@@ -100,3 +100,8 @@ JWT_QUERY_STRING_NAME = "token"
 # 当通过查询字符串query_string传递jwt时，令牌的前缀。
 # 默认值为 "Bearer"，例如：Authorization: Bearer <JWT>
 JWT_QUERY_STRING_VALUE_PREFIX = "jwt "
+
+"""防水墙验证码"""
+CAPTCHA_GATEWAY = "https://ssl.captcha.qq.com/ticket/verify"
+CAPTCHA_APP_ID = "2071340228"
+CAPTCHA_APP_SECRET_KEY = "0v714N6pMtV587ymedaJM2w**"
