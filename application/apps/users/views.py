@@ -1,10 +1,9 @@
 import random
 from typing import Dict, Union, Any
 
-from flask_jwt_extended import get_jwt_identity, jwt_required
-
 from application import message, code
 from application import redis_check as redis
+from flask_jwt_extended import get_jwt_identity, jwt_required
 from .serializers import MobileSchema, ValidationError, UserSchema
 from .services import gen_token, get_user_by_id
 from .tasks import send_sms
@@ -135,4 +134,16 @@ def refresh() -> Dict[str, Any]:
         "data": {
             "access_token": access_token,
         }
+    }
+
+
+@jwt_required()
+def verify() -> Any:
+    """验证客户端上传的token，进行校验，以方便客户端判断用户的登录状态"""
+    payload: Dict[str, Any] = get_jwt_identity()  # 获取refresh token中的载荷
+    access_token, _ = gen_token(payload=payload)
+    return {
+        "errno": code.CODE_OK,
+        "errmsg": message.OK,
+        "access_token": access_token
     }

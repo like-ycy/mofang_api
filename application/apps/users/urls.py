@@ -10,4 +10,5 @@ urlpatterns: List = [
     path("login", views.login),
     path("info", views.info),
     path("refresh", views.refresh),
+    path("verify", views.verify),
 ]
