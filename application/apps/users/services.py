@@ -2,9 +2,9 @@ import base64
 import uuid
 from typing import Dict, Any, Tuple
 
-from flask import current_app, request
+from flask import current_app
 
-from application import redis_cache as cache, mysqldb
+from application import redis_cache as cache, mysqldb, oss
 from flask_jwt_extended import create_access_token, create_refresh_token
 from .models import User
 
@@ -33,17 +33,26 @@ def del_token(id: int):
     cache.delete(f"access_token_{id}")  # cache即redis_cache，上面导包时起了别名
 
 
+class UploadFileError(Exception):
+    """
+    上传文件失败
+    """
+    pass
+
+
 def save_avatar(img: str, ext: str) -> str:
     """保存用户头像"""
     b64_avatar = img[img.find(",") + 1:]  # 获取base64编码的头像数据
     b64_image = base64.b64decode(b64_avatar)  # 讲base64编码的头像数据解码成二进制数据
     file_name = uuid.uuid4()
-    static_path = current_app.BASE_DIR / current_app.config['AVATAR_DIR']
 
-    # 图片先临时保存到本地
-    with open(f'{static_path},{file_name}.{ext}', 'wb') as f:
-        f.write(b64_image)
-    return f"{request.host_url}{current_app.config['AVATAR_DIR']}/{file_name}.{ext}"
+    file = f"{current_app.config['AVATAR_URL']}/{file_name}.{ext}"
+    ret = oss.upload(file, b64_image)
+
+    if ret.status != 200:
+        raise UploadFileError()
+    url = f"{oss.bucket_url}/{file}"
+    return url
 
 
 def update_user(user: User, data: Dict):

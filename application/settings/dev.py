@@ -110,3 +110,12 @@ CAPTCHA_APP_SECRET_KEY = "0v714N6pMtV587ymedaJM2w**"
 # 头像存储路径
 AVATAR_DIR = "application/static/avatar"
 AVATAR_URL = "static/avatar"
+
+"""阿里云"""
+ALI_ACCESS_KEY_ID = "xxxxxxxx"  # 访问key
+ALI_ACCESS_KEY_SECRET = "xxxxxxxx"  # 访问秘钥
+
+# OSS对象存储
+OSS_ENDPOINT = "oss-cn-beijing.aliyuncs.com"  # 存储节点
+OSS_BUCKET_NAME = "mofangproject"  # 存储空间
+OSS_BUCKET_URL = "https://mofangproject.oss-cn-beijing.aliyuncs.com"

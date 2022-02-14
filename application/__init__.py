@@ -10,6 +10,7 @@ from flask_redis import FlaskRedis
 from flask_sqlalchemy import SQLAlchemy
 
 from application.utils import message, code
+from application.utils.alioss import OSS
 from application.utils.blueprint import register_blueprint, path, APIView
 from application.utils.commands import Command
 from application.utils.config import Config
@@ -43,6 +44,9 @@ celery = Celery()
 
 # jwt认证模块实例化
 jwt = JWTManager()
+
+# 阿里云OSS实例化
+oss = OSS()
 
 
 def init_app(config_path) -> Flask:
@@ -93,6 +97,9 @@ def init_app(config_path) -> Flask:
     celery.conf.update(app.config)
     # 自动注册任务
     celery.autodiscover_tasks(app.config.get("INSTALL_BLUEPRINT"))
+
+    # 阿里云对象存储安装注册
+    oss.init_app(app)
 
     # 启动项目自动根据模型建表
     with app.app_context():
