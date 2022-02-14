@@ -1,8 +1,10 @@
+import base64
+import uuid
 from typing import Dict, Any, Tuple
 
-from flask import current_app
+from flask import current_app, request
 
-from application import redis_cache as cache
+from application import redis_cache as cache, mysqldb
 from flask_jwt_extended import create_access_token, create_refresh_token
 from .models import User
 
@@ -29,3 +31,23 @@ def get_user_by_id(id: int):
 def del_token(id: int):
     """删除token"""
     cache.delete(f"access_token_{id}")  # cache即redis_cache，上面导包时起了别名
+
+
+def save_avatar(img: str, ext: str) -> str:
+    """保存用户头像"""
+    b64_avatar = img[img.find(",") + 1:]  # 获取base64编码的头像数据
+    b64_image = base64.b64decode(b64_avatar)  # 讲base64编码的头像数据解码成二进制数据
+    file_name = uuid.uuid4()
+    static_path = current_app.BASE_DIR / current_app.config['AVATAR_DIR']
+
+    # 图片先临时保存到本地
+    with open(f'{static_path},{file_name}.{ext}', 'wb') as f:
+        f.write(b64_image)
+    return f"{request.host_url}{current_app.config['AVATAR_DIR']}/{file_name}.{ext}"
+
+
+def update_user(user: User, data: Dict):
+    """更新用户信息"""
+    for k, v in data.items():
+        setattr(user, k, v)
+    mysqldb.session.commit()

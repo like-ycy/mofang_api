@@ -12,4 +12,5 @@ urlpatterns: List = [
     path("refresh", views.refresh),
     path("verify", views.verify),
     path("logout", views.logout),
+    path("avatar", views.avatar),
 ]

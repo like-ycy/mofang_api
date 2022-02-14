@@ -105,3 +105,8 @@ JWT_QUERY_STRING_VALUE_PREFIX = "jwt "
 CAPTCHA_GATEWAY = "https://ssl.captcha.qq.com/ticket/verify"
 CAPTCHA_APP_ID = "2071340228"
 CAPTCHA_APP_SECRET_KEY = "0v714N6pMtV587ymedaJM2w**"
+
+"""静态文件存储目录"""
+# 头像存储路径
+AVATAR_DIR = "application/static/avatar"
+AVATAR_URL = "static/avatar"

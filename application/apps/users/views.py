@@ -5,7 +5,7 @@ from application import message, code
 from application import redis_check as redis
 from flask_jwt_extended import get_jwt_identity, jwt_required
 from .serializers import MobileSchema, ValidationError, UserSchema
-from .services import gen_token, get_user_by_id, del_token
+from .services import gen_token, get_user_by_id, del_token, save_avatar, update_user
 from .tasks import send_sms
 
 
@@ -156,4 +156,31 @@ def logout() -> Any:
     return {
         "errno": code.CODE_OK,
         "errmsg": message.OK
+    }
+
+
+@jwt_required()
+def avatar(img: str) -> Dict[str, Any]:
+    """更新用户头像"""
+    # 1、从base64内容中截取客户端上传头像图片格式
+    ext = img[img.find('/') + 1:img.find(';')]
+    # 2、判断格式是否符合要求
+    if ext not in ["png", "svg", "jpeg", "jpg"]:
+        return {
+            "errno": code.CODE_IMAGE_FORMAT_ERROR,
+            "errmsg": message.IMAGE_FORMAT_ERROR,
+        }
+    # 3、保存头像
+    url = save_avatar(img, ext)
+    # 4、更新用户信息，返回新的token
+    user_info: Dict[str, Any] = get_jwt_identity()  # 获取refresh_token中的载荷
+    user = get_user_by_id(user_info['id'])  # 根据用户id拿到用户模型对象
+    update_user(user, {"avatar": url})
+    user_info['avatar'] = url
+    access_token, refresh_token = gen_token(user_info)  # 生成新的token
+    return {
+        "errno": code.CODE_OK,
+        "errmsg": message.OK,
+        "access_token": access_token,
+        "refresh": refresh_token
     }

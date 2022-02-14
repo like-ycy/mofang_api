@@ -6,3 +6,4 @@ CODE_USER_NOT_EXISTS = 1101  # 当前用户不存在！
 CODE_JWT_INVALID = 1010  # 无效的jwt token
 CODE_JWT_NOT_TOKEN = 1011  # 没有找到jwt token
 CODE_JWT_EXPIRED = 1012  # jwt登录已超时
+CODE_IMAGE_FORMAT_ERROR = 1020  # 错误的图片格式
