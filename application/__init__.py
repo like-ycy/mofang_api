@@ -14,6 +14,7 @@ from application.utils.alioss import OSS
 from application.utils.blueprint import register_blueprint, path, APIView
 from application.utils.commands import Command
 from application.utils.config import Config
+from application.utils.decorators import get_user_object
 from application.utils.logger import Logger
 from flask_jwt_extended import JWTManager
 

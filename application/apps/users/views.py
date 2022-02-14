@@ -1,9 +1,10 @@
 import random
 from typing import Dict, Union, Any
 
-from application import message, code
+from application import message, code, get_user_object
 from application import redis_check as redis
 from flask_jwt_extended import get_jwt_identity, jwt_required
+from .models import User
 from .serializers import MobileSchema, ValidationError, UserSchema
 from .services import gen_token, get_user_by_id, del_token, save_avatar, update_user
 from .tasks import send_sms
@@ -113,15 +114,16 @@ def login(account: str, password: str) -> Dict[str, Any]:
     return result
 
 
-@jwt_required()  # 验证 jwt的 assess token
-def info() -> Any:
+@get_user_object  # 验证 jwt的 assess token
+def info(user: User) -> Any:
     """获取用户身份信息"""
     user_info: Dict[str, Any] = get_jwt_identity()  # 获取refresh token中的载荷
+    user_info['mobile'] = user.mobile
     return {"errno": code.CODE_OK, "errmsg": message.OK, "data": user_info}
 
 
-@jwt_required()
-def verify() -> Any:
+@get_user_object
+def verify(user: User) -> Any:
     """验证客户端上传的token，进行校验，以方便客户端判断用户的登录状态"""
     payload: Dict[str, Any] = get_jwt_identity()  # 获取refresh token中的载荷
     access_token, _ = gen_token(payload=payload)
@@ -159,8 +161,8 @@ def logout() -> Any:
     }
 
 
-@jwt_required()
-def avatar(img: str) -> Dict[str, Any]:
+@get_user_object
+def avatar(user: User, img: str) -> Dict[str, Any]:
     """更新用户头像"""
     # 1、从base64内容中截取客户端上传头像图片格式
     ext = img[img.find('/') + 1:img.find(';')]
@@ -174,7 +176,6 @@ def avatar(img: str) -> Dict[str, Any]:
     url = save_avatar(img, ext)
     # 4、更新用户信息，返回新的token
     user_info: Dict[str, Any] = get_jwt_identity()  # 获取refresh_token中的载荷
-    user = get_user_by_id(user_info['id'])  # 根据用户id拿到用户模型对象
     update_user(user, {"avatar": url})
     user_info['avatar'] = url
     access_token, refresh_token = gen_token(user_info)  # 生成新的token
